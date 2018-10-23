@@ -191,7 +191,7 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             ],
             'invalid void param on ^7.1' => [
                 '<?php /** @param null|void $foo */ function my_foo($foo) {}',
-                null,
+                '',
                 70100,
             ],
             'iterable return on ^7.1' => [
