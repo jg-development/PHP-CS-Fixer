@@ -35,9 +35,9 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
      * @var array
      */
     private $blacklistFuncNames = [
+        [T_STRING, '__clone'],
         [T_STRING, '__construct'],
         [T_STRING, '__destruct'],
-        [T_STRING, '__clone'],
     ];
 
     /**
@@ -45,8 +45,8 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
      */
     private $skippedTypes = [
         'mixed' => true,
-        'resource' => true,
         'null' => true,
+        'resource' => true,
         'static' => true,
     ];
 
@@ -54,9 +54,9 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
      * @var array
      */
     private $versionSpecificTypes = [
-        'void' => 70100,
         'iterable' => 70100,
         'object' => 70200,
+        'void' => 70100,
     ];
 
     /**
