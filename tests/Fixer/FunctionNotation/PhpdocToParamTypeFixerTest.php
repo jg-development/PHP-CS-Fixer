@@ -67,12 +67,12 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
 
                     class Foo
                     {
-                        /** @param Bar */
-                        function __construct() {}
-                        /** @param Bar */
-                        function __destruct() {}
-                        /** @param Bar */
-                        function __clone() {}
+                        /** @param $bar Bar */
+                        function __construct($bar) {}
+                        /** @param $bar Bar */
+                        function __destruct($bar) {}
+                        /** @param $bar Bar */
+                        function __clone($bar) {}
                     }
                 ',
             ],
@@ -191,6 +191,8 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             ],
             'invalid void param on ^7.1' => [
                 '<?php /** @param null|void $foo */ function my_foo($foo) {}',
+                null,
+                70100,
             ],
             'iterable return on ^7.1' => [
                 '<?php /** @param iterable $counter */ function my_foo(iterable $counter) {}',
@@ -225,16 +227,16 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 ',
             ],
             'skip resource special type' => [
-                '<?php /** @param resource */ function my_foo() {}',
+                '<?php /** @param $bar resource */ function my_foo($bar) {}',
             ],
             'skip mixed special type' => [
-                '<?php /** @param mixed */ function my_foo() {}',
+                '<?php /** @param $bar mixed */ function my_foo($bar) {}',
             ],
             'null alone cannot be a param type' => [
-                '<?php /** @param null */ function my_foo() {}',
+                '<?php /** @param $bar null */ function my_foo($bar) {}',
             ],
             'skip mixed types' => [
-                '<?php /** @param Foo|Bar */ function my_foo() {}',
+                '<?php /** @param $bar Foo|Bar */ function my_foo($bar) {}',
             ],
             'array of types' => [
                 '<?php /** @param Foo[] $foo */ function my_foo(array $foo) {}',
@@ -279,6 +281,11 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param null|Foo $foo */ function my_foo(?Foo $foo) {}',
                 '<?php /** @param null|Foo $foo */ function my_foo($foo) {}',
                 70100,
+            ],
+            'object param' => [
+                '<?php /** @param object $foo */ function my_foo(object $foo) {}',
+                '<?php /** @param object $foo */ function my_foo($foo) {}',
+                70200,
             ],
             'nullable and object param' => [
                 '<?php /** @param null|object $foo */ function my_foo(?object $foo) {}',

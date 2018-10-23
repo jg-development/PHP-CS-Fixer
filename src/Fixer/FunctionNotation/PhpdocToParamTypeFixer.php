@@ -109,7 +109,7 @@ function my_foo($bar)
      */
     public function getPriority()
     {
-        // NoSuperfluousPhpdocTagsFixer.
+        // should be run before NoSuperfluousPhpdocTagsFixer.
         return 8;
     }
 
