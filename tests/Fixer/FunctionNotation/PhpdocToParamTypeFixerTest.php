@@ -189,11 +189,6 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php interface Foo { /** @param Bar $bar */ function my_foo(Bar $bar); }',
                 '<?php interface Foo { /** @param Bar $bar */ function my_foo($bar); }',
             ],
-            'invalid void param on ^7.1' => [
-                '<?php /** @param null|void $foo */ function my_foo($foo) {}',
-                '',
-                70100,
-            ],
             'iterable return on ^7.1' => [
                 '<?php /** @param iterable $counter */ function my_foo(iterable $counter) {}',
                 '<?php /** @param iterable $counter */ function my_foo($counter) {}',
