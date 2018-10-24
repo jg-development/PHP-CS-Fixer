@@ -69,10 +69,6 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                     {
                         /** @param $bar Bar */
                         function __construct($bar) {}
-                        /** @param $bar Bar */
-                        function __destruct($bar) {}
-                        /** @param $bar Bar */
-                        function __clone($bar) {}
                     }
                 ',
             ],
