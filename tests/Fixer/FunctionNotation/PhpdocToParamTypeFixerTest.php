@@ -65,6 +65,16 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'invalid - phpdoc param with false param order' => [
                 '<?php /** @param $foo string */ function my_foo($foo) {}',
             ],
+            'invalid - phpdoc param with hint for next method' => [
+                '<?php
+                    /**
+                    * @param string $bar
+                    */
+                    function my_foo() {}
+                    
+                    function my_foo2($bar) {}
+                    ',
+            ],
             'non-root class with single int param' => [
                 '<?php /** @param int $bar */ function my_foo(int $bar) {}',
                 '<?php /** @param int $bar */ function my_foo($bar) {}',

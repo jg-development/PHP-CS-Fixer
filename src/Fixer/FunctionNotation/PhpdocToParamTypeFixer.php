@@ -200,6 +200,9 @@ function my_foo($bar)
 
                 $startIndex = $tokens->getNextTokenOfKind($index, ['(']) + 1;
                 $variableIndex = $this->findCorrectVariable($tokens, $startIndex - 1, $paramTypeAnnotation);
+                if (null === $variableIndex) {
+                    continue;
+                }
 
                 if ('(' === $tokens[$variableIndex - 1]->getContent()) {
                     if (!$tokens[$variableIndex]->isGivenKind([T_VARIABLE])) {
@@ -304,7 +307,11 @@ function my_foo($bar)
      */
     private function findCorrectVariable(Tokens $tokens, $index, $paramTypeAnnotation)
     {
+        $nextFunction = $tokens->getNextTokenOfKind($index, [[T_FUNCTION]]);
         $variableIndex = $tokens->getNextTokenOfKind($index, [[T_VARIABLE]]);
+        if (\is_int($nextFunction) && $variableIndex > $nextFunction) {
+            return null;
+        }
         $variableToken = $tokens[$variableIndex]->getContent();
         Preg::match('/@param\s*[^\s]+\s*([^\s]+)/', $paramTypeAnnotation->getContent(), $paramVariable);
         if (isset($paramVariable[1]) && $paramVariable[1] === $variableToken) {
