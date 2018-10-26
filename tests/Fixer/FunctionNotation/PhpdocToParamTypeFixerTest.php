@@ -53,24 +53,17 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'no phpdoc param' => [
                 '<?php function my_foo() {}',
             ],
-            'invalid param' => [
-                '<?php /** @param */ function my_foo() {}',
+            'invalid - phpdoc param without variable' => [
+                '<?php /** @param */ function my_foo($bar) {}',
             ],
-            'invalid class 1' => [
-                '<?php /** @param \9 */ function my_foo() {}',
+            'invalid - phpdoc param with non existing class' => [
+                '<?php /** @param \9 */ function my_foo($bar) {}',
             ],
-            'invalid class 2' => [
-                '<?php /** @param \\Foo\\\\Bar */ function my_foo() {}',
+            'invalid - phpdoc param with false class hint' => [
+                '<?php /** @param $foo \\Foo\\\\Bar */ function my_foo($foo) {}',
             ],
-            'blacklisted class methods' => [
-                '<?php
-
-                    class Foo
-                    {
-                        /** @param $bar Bar */
-                        function __construct($bar) {}
-                    }
-                ',
+            'invalid - phpdoc param with false param order' => [
+                '<?php /** @param $foo string */ function my_foo($foo) {}',
             ],
             'non-root class with single int param' => [
                 '<?php /** @param int $bar */ function my_foo(int $bar) {}',
