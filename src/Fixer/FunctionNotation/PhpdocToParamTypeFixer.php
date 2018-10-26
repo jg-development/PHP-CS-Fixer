@@ -36,7 +36,6 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
      */
     private $blacklistFuncNames = [
         [T_STRING, '__clone'],
-        [T_STRING, '__construct'],
         [T_STRING, '__destruct'],
     ];
 
