@@ -71,7 +71,6 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                     * @param string $bar
                     */
                     function my_foo() {}
-                    
                     function my_foo2($bar) {}
                     ',
             ],
