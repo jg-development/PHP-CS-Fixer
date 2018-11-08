@@ -312,6 +312,9 @@ function my_foo($bar)
         if (\is_int($nextFunction) && $variableIndex > $nextFunction) {
             return null;
         }
+        if (!isset($tokens[$variableIndex])) {
+            return null;
+        }
         $variableToken = $tokens[$variableIndex]->getContent();
         Preg::match('/@param\s*[^\s]+\s*([^\s]+)/', $paramTypeAnnotation->getContent(), $paramVariable);
         if (isset($paramVariable[1]) && $paramVariable[1] === $variableToken) {

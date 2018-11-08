@@ -285,6 +285,9 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param null|object $foo */ function my_foo($foo) {}',
                 70200,
             ],
+            'stop searching last token' => [
+                '<?php class Foo { /** @param Bar $bar */ public function foo($tab) { } }',
+            ],
         ];
     }
 }
