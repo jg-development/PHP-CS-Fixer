@@ -82,10 +82,6 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param float $bar */ function my_foo(float $bar) {}',
                 '<?php /** @param float $bar */ function my_foo($bar) {}',
             ],
-            'non-root class with multiple string param' => [
-                '<?php /** @param float $bar */ function my_foo(float $bar) {}',
-                '<?php /** @param float $bar */ function my_foo($bar) {}',
-            ],
             'non-root class with multiple string params' => [
                 '<?php
                     /**

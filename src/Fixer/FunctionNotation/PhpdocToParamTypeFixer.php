@@ -171,11 +171,11 @@ function my_foo($bar)
                         continue;
                     }
 
-                    $isNullable = true;
-
                     if (\PHP_VERSION_ID < 70100) {
                         continue;
                     }
+
+                    $isNullable = true;
 
                     if ('void' === $paramType) {
                         continue;
@@ -204,14 +204,8 @@ function my_foo($bar)
                     continue;
                 }
 
-                if ('(' === $tokens[$variableIndex - 1]->getContent()) {
-                    if (!$tokens[$variableIndex]->isGivenKind([T_VARIABLE])) {
-                        continue;
-                    }
-                } else {
-                    if ($this->hasParamTypeHint($tokens, $variableIndex - 2)) {
-                        continue;
-                    }
+                if (!('(' === $tokens[$variableIndex - 1]->getContent()) && $this->hasParamTypeHint($tokens, $variableIndex - 2)) {
+                    continue;
                 }
 
                 $this->fixFunctionDefinition($tokens, $variableIndex, $isNullable, $paramType);
