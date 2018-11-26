@@ -160,6 +160,10 @@ function my_foo($bar)
                 $isNullable = false;
                 $paramType = current($types);
                 if (2 === $typesCount) {
+                    if (\PHP_VERSION_ID < 70100) {
+                        continue;
+                    }
+
                     $null = $types[0];
                     $paramType = $types[1];
                     if ('null' !== $null) {
@@ -168,10 +172,6 @@ function my_foo($bar)
                     }
 
                     if ('null' !== $null) {
-                        continue;
-                    }
-
-                    if (\PHP_VERSION_ID < 70100) {
                         continue;
                     }
 
