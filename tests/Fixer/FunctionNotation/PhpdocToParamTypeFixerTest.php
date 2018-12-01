@@ -231,7 +231,7 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param $bar null */ function my_foo($bar) {}',
             ],
             'skip mixed types' => [
-                '<?php /** @param $bar Foo|Bar */ function my_foo($bar) {}',
+                '<?php /** @param Foo|Bar $bar */ function my_foo($bar) {}',
             ],
             'array of types' => [
                 '<?php /** @param Foo[] $foo */ function my_foo(array $foo) {}',
@@ -240,6 +240,21 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'nullable array of types' => [
                 '<?php /** @param null|Foo[] $foo */ function my_foo(?array $foo) {}',
                 '<?php /** @param null|Foo[] $foo */ function my_foo($foo) {}',
+                70100,
+            ],
+            'nullable and mixed types of arrays' => [
+                '<?php /** @param null|Foo[]|Bar[] $foo */ function my_foo(?array $foo) {}',
+                '<?php /** @param null|Foo[]|Bar[] $foo */ function my_foo($foo) {}',
+                70100,
+            ],
+            'nullable and array and array of types' => [
+                '<?php /** @param null|Foo[]|array $foo */ function my_foo(?array $foo) {}',
+                '<?php /** @param null|Foo[]|array $foo */ function my_foo($foo) {}',
+                70100,
+            ],
+            'nullable array of array of types' => [
+                '<?php /** @param null|Foo[][] $foo */ function my_foo(?array $foo) {}',
+                '<?php /** @param null|Foo[][] $foo */ function my_foo($foo) {}',
                 70100,
             ],
             'nullable and string param' => [
@@ -275,6 +290,11 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'nullable and class name param' => [
                 '<?php /** @param null|Foo $foo */ function my_foo(?Foo $foo) {}',
                 '<?php /** @param null|Foo $foo */ function my_foo($foo) {}',
+                70100,
+            ],
+            'array and iterable param' => [
+                '<?php /** @param Foo[]|iterable $foo */ function my_foo(array $foo) {}',
+                '<?php /** @param Foo[]|iterable $foo */ function my_foo($foo) {}',
                 70100,
             ],
             'object param' => [
