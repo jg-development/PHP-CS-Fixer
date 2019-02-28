@@ -33,6 +33,8 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
 {
     const CLASS_REGEX = '/^\\\\?[a-zA-Z_\\x7f-\\xff](?:\\\\?[a-zA-Z0-9_\\x7f-\\xff]+)*(?<array>\[\])*$/';
 
+    const MINIMUM_PHP_VERSION = 70000;
+
     /**
      * @var array
      */
@@ -49,9 +51,6 @@ final class PhpdocToParamTypeFixer extends AbstractFixer implements Configuratio
         'resource' => true,
         'static' => true,
     ];
-
-    /** @var int */
-    private $minimumPhpVersion = 70000;
 
     /**
      * {@inheritdoc}
@@ -90,7 +89,7 @@ function my_foo($bar)
      */
     public function isCandidate(Tokens $tokens)
     {
-        return \PHP_VERSION_ID >= 70000 && $tokens->isTokenKindFound(T_FUNCTION);
+        return \PHP_VERSION_ID >= self::MINIMUM_PHP_VERSION && $tokens->isTokenKindFound(T_FUNCTION);
     }
 
     /**
@@ -141,7 +140,7 @@ function my_foo($bar)
             $paramTypeAnnotations = $this->findParamAnnotations($tokens, $index);
 
             foreach ($paramTypeAnnotations as $paramTypeAnnotation) {
-                if (\PHP_VERSION_ID < 70000) {
+                if (\PHP_VERSION_ID < self::MINIMUM_PHP_VERSION) {
                     continue;
                 }
 
@@ -162,6 +161,7 @@ function my_foo($bar)
                 $hasBool = false;
                 $hasCallable = false;
                 $hasObject = false;
+                $minimumTokenPhpVersion = self::MINIMUM_PHP_VERSION;
                 foreach ($types as $key => $type) {
                     if (1 !== Preg::match(self::CLASS_REGEX, $type, $matches)) {
                         continue;
@@ -173,12 +173,12 @@ function my_foo($bar)
                     if ($this->typeIsOfIterable($type)) {
                         $hasIterable = true;
                         unset($types[$key]);
-                        $this->setMinimumPhpVersionToAtLeast(70100);
+                        $minimumTokenPhpVersion = 70100;
                     }
                     if ($this->typeIsOfNull($type)) {
                         $hasNull = true;
                         unset($types[$key]);
-                        $this->setMinimumPhpVersionToAtLeast(70100);
+                        $minimumTokenPhpVersion = 70100;
                     }
                     if ($this->typeIsOfVoid($type)) {
                         $hasVoid = true;
@@ -211,11 +211,11 @@ function my_foo($bar)
                     if ($this->typeIsOfObject($type)) {
                         $hasObject = true;
                         unset($types[$key]);
-                        $this->setMinimumPhpVersionToAtLeast(70200);
+                        $minimumTokenPhpVersion = 70200;
                     }
                 }
 
-                if (\PHP_VERSION_ID < $this->minimumPhpVersion) {
+                if (\PHP_VERSION_ID < $minimumTokenPhpVersion) {
                     continue;
                 }
 
@@ -289,13 +289,6 @@ function my_foo($bar)
         $doc = new DocBlock($tokens[$index]->getContent());
 
         return $doc->getAnnotationsOfType('param');
-    }
-
-    private function setMinimumPhpVersionToAtLeast(int $int)
-    {
-        if ($this->minimumPhpVersion < $int) {
-            $this->minimumPhpVersion = $int;
-        }
     }
 
     /**
