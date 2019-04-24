@@ -31,8 +31,10 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpdocToParamTypeFixer extends AbstractFixer implements ConfigurationDefinitionFixerInterface
 {
+    /** @internal */
     const CLASS_REGEX = '/^\\\\?[a-zA-Z_\\x7f-\\xff](?:\\\\?[a-zA-Z0-9_\\x7f-\\xff]+)*(?<array>\[\])*$/';
 
+    /** @internal */
     const MINIMUM_PHP_VERSION = 70000;
 
     /**
@@ -170,45 +172,45 @@ function my_foo($bar)
                         $hasArray = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfIterable($type)) {
+                    if ('iterable' === $type) {
                         $hasIterable = true;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70100;
                     }
-                    if ($this->typeIsOfNull($type)) {
+                    if ('null' === $type) {
                         $hasNull = true;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70100;
                     }
-                    if ($this->typeIsOfVoid($type)) {
+                    if ('void' === $type) {
                         $hasVoid = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfString($type)) {
+                    if ('string' === $type) {
                         $hasString = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfInt($type)) {
+                    if ('int' === $type) {
                         $hasInt = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfFloat($type)) {
+                    if ('float' === $type) {
                         $hasFloat = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfBool($type)) {
+                    if ('bool' === $type) {
                         $hasBool = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfCallable($type)) {
+                    if ('callable' === $type) {
                         $hasCallable = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfArray($type)) {
+                    if ('array' === $type) {
                         $hasArray = true;
                         unset($types[$key]);
                     }
-                    if ($this->typeIsOfObject($type)) {
+                    if ('object' === $type) {
                         $hasObject = true;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70200;
@@ -404,55 +406,5 @@ function my_foo($bar)
         }
         $newTokens[] = new Token([T_WHITESPACE, ' ']);
         $tokens->insertAt($index, $newTokens);
-    }
-
-    private function typeIsOfIterable($type)
-    {
-        return 'iterable' === $type ? true : false;
-    }
-
-    private function typeIsOfNull($type)
-    {
-        return 'null' === $type ? true : false;
-    }
-
-    private function typeIsOfVoid($type)
-    {
-        return 'void' === $type ? true : false;
-    }
-
-    private function typeIsOfString($type)
-    {
-        return 'string' === $type ? true : false;
-    }
-
-    private function typeIsOfInt($type)
-    {
-        return 'int' === $type ? true : false;
-    }
-
-    private function typeIsOfFloat($type)
-    {
-        return 'float' === $type ? true : false;
-    }
-
-    private function typeIsOfBool($type)
-    {
-        return 'bool' === $type ? true : false;
-    }
-
-    private function typeIsOfCallable($type)
-    {
-        return 'callable' === $type ? true : false;
-    }
-
-    private function typeIsOfArray($type)
-    {
-        return 'array' === $type ? true : false;
-    }
-
-    private function typeIsOfObject($type)
-    {
-        return 'object' === $type ? true : false;
     }
 }
