@@ -307,6 +307,12 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param null|object $foo */ function my_foo($foo) {}',
                 70200,
             ],
+            'generics with single type is not supported' => [
+                '<?php /** @param array<foo> $foo */ function my_foo($foo) {}',
+            ],
+            'generics with multiple types are not supported' => [
+                '<?php /** @param array<int, string> $foo */ function my_foo($foo) {}',
+            ],
             'stop searching last token' => [
                 '<?php class Foo { /** @param Bar $bar */ public function foo($tab) { } }',
             ],
