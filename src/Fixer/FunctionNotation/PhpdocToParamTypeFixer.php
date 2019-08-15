@@ -153,6 +153,11 @@ function my_foo($bar)
                     continue;
                 }
 
+                $hasMultipleTypes = false;
+                if (1 < \count($types)) {
+                    $hasMultipleTypes = true;
+                }
+
                 $hasIterable = false;
                 $hasNull = false;
                 $hasVoid = false;
@@ -163,6 +168,7 @@ function my_foo($bar)
                 $hasBool = false;
                 $hasCallable = false;
                 $hasObject = false;
+                $hasStdClass = false;
                 $minimumTokenPhpVersion = self::MINIMUM_PHP_VERSION;
                 foreach ($types as $key => $type) {
                     if (1 !== Preg::match(self::CLASS_REGEX, $type, $matches)) {
@@ -215,6 +221,10 @@ function my_foo($bar)
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70200;
                     }
+                    if ('stdClass' === $type) {
+                        $hasStdClass = true;
+                        unset($types[$key]);
+                    }
                 }
 
                 if (\PHP_VERSION_ID < $minimumTokenPhpVersion) {
@@ -243,6 +253,10 @@ function my_foo($bar)
                     continue;
                 }
 
+                if (true === $hasMultipleTypes && !($hasIterable && $hasArray) && (false === $hasNull)) {
+                    continue;
+                }
+
                 $this->fixFunctionDefinition(
                     $paramType,
                     $tokens,
@@ -256,7 +270,8 @@ function my_foo($bar)
                     $hasFloat,
                     $hasBool,
                     $hasCallable,
-                    $hasObject
+                    $hasObject,
+                    $hasStdClass
                 );
             }
         }
@@ -346,6 +361,7 @@ function my_foo($bar)
      * @param bool   $hasBool
      * @param bool   $hasCallable
      * @param bool   $hasObject
+     * @param bool   $hasStdClass
      */
     private function fixFunctionDefinition(
         $paramType,
@@ -360,7 +376,8 @@ function my_foo($bar)
         $hasFloat,
         $hasBool,
         $hasCallable,
-        $hasObject
+        $hasObject,
+        $hasStdClass
     ) {
         if (true === $hasNull) {
             $newTokens[] = new Token([CT::T_NULLABLE_TYPE, '?']);
@@ -392,6 +409,9 @@ function my_foo($bar)
         }
         if (true === $hasObject) {
             $newTokens[] = new Token([T_STRING, 'object']);
+        }
+        if (true === $hasStdClass) {
+            $newTokens[] = new Token([T_STRING, 'stdClass']);
         }
 
         foreach (explode('\\', $paramType) as $nsIndex => $value) {

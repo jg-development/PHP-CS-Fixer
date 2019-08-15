@@ -316,6 +316,9 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'stop searching last token' => [
                 '<?php class Foo { /** @param Bar $bar */ public function foo($tab) { } }',
             ],
+            'union type containing a scalar' => [
+                '<?php /** @param int|stdClass $bar */ function my_foo($bar) {}',
+            ],
         ];
     }
 }
