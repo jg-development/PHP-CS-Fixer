@@ -287,6 +287,9 @@ function my_foo($bar)
                 if (2 === \count($numberOfDifferentTypes) && '' !== $paramType) {
                     continue;
                 }
+                if (1 === \count($numberOfDifferentTypes) && '' !== $paramType && $hasArray) {
+                    continue;
+                }
 
                 $this->fixFunctionDefinition(
                     $paramType,

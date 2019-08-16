@@ -351,6 +351,12 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'union type containing null and non scalar type' => [
                 '<?php /** @param string|Transition|null $bar */ function my_foo($bar) {}',
             ],
+            'non scalar type or array' => [
+                '<?php /** @param array|InputDefinition $bar */ function my_foo($bar) {}',
+            ],
+            'multiple non scalar type or array' => [
+                '<?php /** @param array|InputDefinition|Foo $bar */ function my_foo($bar) {}',
+            ],
         ];
     }
 }
