@@ -169,6 +169,7 @@ function my_foo($bar)
                 $hasCallable = false;
                 $hasObject = false;
                 $hasStdClass = false;
+                $hasTraversable = false;
                 $minimumTokenPhpVersion = self::MINIMUM_PHP_VERSION;
                 foreach ($types as $key => $type) {
                     if (1 !== Preg::match(self::CLASS_REGEX, $type, $matches)) {
@@ -182,6 +183,10 @@ function my_foo($bar)
                         $hasIterable = true;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70100;
+                    }
+                    if (stripos($type, 'Traversable')) {
+                        $hasTraversable = true;
+                        unset($types[$key]);
                     }
                     if ('null' === $type) {
                         $hasNull = true;
@@ -253,7 +258,8 @@ function my_foo($bar)
                     continue;
                 }
 
-                if (true === $hasMultipleTypes && !($hasIterable && $hasArray) && (false === $hasNull)) {
+                if ((true === $hasMultipleTypes && false === $hasArray) &&
+                    true === $hasMultipleTypes && !($hasIterable && $hasArray) && (false === $hasNull)) {
                     continue;
                 }
 
@@ -271,7 +277,8 @@ function my_foo($bar)
                     $hasBool,
                     $hasCallable,
                     $hasObject,
-                    $hasStdClass
+                    $hasStdClass,
+                    $hasTraversable
                 );
             }
         }
@@ -350,7 +357,7 @@ function my_foo($bar)
     /**
      * @param string $paramType
      * @param Tokens $tokens
-     * @param int    $index       The index of the end of the function definition line, EG at { or ;
+     * @param int    $index          The index of the end of the function definition line, EG at { or ;
      * @param bool   $hasNull
      * @param bool   $hasArray
      * @param bool   $hasIterable
@@ -362,6 +369,7 @@ function my_foo($bar)
      * @param bool   $hasCallable
      * @param bool   $hasObject
      * @param bool   $hasStdClass
+     * @param bool   $hasTraversable
      */
     private function fixFunctionDefinition(
         $paramType,
@@ -377,7 +385,8 @@ function my_foo($bar)
         $hasBool,
         $hasCallable,
         $hasObject,
-        $hasStdClass
+        $hasStdClass,
+        $hasTraversable
     ) {
         if (true === $hasNull) {
             $newTokens[] = new Token([CT::T_NULLABLE_TYPE, '?']);
@@ -388,6 +397,8 @@ function my_foo($bar)
         if (true === $hasIterable && true === $hasArray) {
             $newTokens[] = new Token([CT::T_ARRAY_TYPEHINT, 'array']);
         } elseif (true === $hasIterable) {
+            $newTokens[] = new Token([T_STRING, 'iterable']);
+        } elseif (true === $hasArray && true === $hasTraversable) {
             $newTokens[] = new Token([T_STRING, 'iterable']);
         } elseif (true === $hasArray) {
             $newTokens[] = new Token([CT::T_ARRAY_TYPEHINT, 'array']);

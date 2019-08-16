@@ -319,6 +319,18 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'union type containing a scalar' => [
                 '<?php /** @param int|stdClass $bar */ function my_foo($bar) {}',
             ],
+            'array and traversable' => [
+                '<?php /** @param array|\Traversable $bar */ function my_foo(iterable $bar) {}',
+                '<?php /** @param array|\Traversable $bar */ function my_foo($bar) {}',
+            ],
+            'array and array class' => [
+                '<?php /** @param array|Foo[] $bar */ function my_foo(array $bar) {}',
+                '<?php /** @param array|Foo[] $bar */ function my_foo($bar) {}',
+            ],
+            'iterable and array class' => [
+                '<?php /** @param iterable|Foo[] $bar */ function my_foo(array $bar) {}',
+                '<?php /** @param iterable|Foo[] $bar */ function my_foo($bar) {}',
+            ],
         ];
     }
 }
