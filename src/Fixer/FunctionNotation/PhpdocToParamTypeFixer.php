@@ -281,6 +281,13 @@ function my_foo($bar)
                     continue;
                 }
 
+                if (2 === \count($numberOfDifferentTypes) && ('' === $paramType && false === $hasNull && !(($hasIterable || $hasTraversable) && $hasArray))) {
+                    continue;
+                }
+                if (2 === \count($numberOfDifferentTypes) && '' !== $paramType) {
+                    continue;
+                }
+
                 $this->fixFunctionDefinition(
                     $paramType,
                     $tokens,
@@ -334,9 +341,9 @@ function my_foo($bar)
     }
 
     /**
-     * @param Tokens $tokens
-     * @param $index
-     * @param $paramTypeAnnotation
+     * @param Tokens     $tokens
+     * @param int        $index
+     * @param Annotation $paramTypeAnnotation
      *
      * @return null|int
      */
