@@ -334,6 +334,14 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'union type scalars with null' => [
                 '<?php /** @param int|string|null $bar */ function my_foo($bar) {}',
             ],
+            'reference symbol' => [
+                '<?php /** @param array $bar */ function my_foo(array &$bar) {}',
+                '<?php /** @param array $bar */ function my_foo(&$bar) {}',
+            ],
+            'reference symbol in php doc' => [
+                '<?php /** @param array &$bar */ function my_foo(array &$bar) {}',
+                '<?php /** @param array &$bar */ function my_foo(&$bar) {}',
+            ],
         ];
     }
 }

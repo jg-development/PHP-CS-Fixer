@@ -352,7 +352,11 @@ function my_foo($bar)
         }
         $variableToken = $tokens[$variableIndex]->getContent();
         Preg::match('/@param\s*[^\s!<]+\s*([^\s]+)/', $paramTypeAnnotation->getContent(), $paramVariable);
-        if (isset($paramVariable[1]) && $paramVariable[1] === $variableToken) {
+        $possibleReferenceToken = $tokens->offsetGet($variableIndex - 1);
+        if ('&' === $possibleReferenceToken->getContent()) {
+            $variableIndex = $variableIndex - 1;
+        }
+        if (isset($paramVariable[1]) && ($paramVariable[1] === $variableToken || $paramVariable[1] === '&'.$variableToken)) {
             return $variableIndex;
         }
 
