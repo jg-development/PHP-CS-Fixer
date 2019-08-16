@@ -171,63 +171,77 @@ function my_foo($bar)
                 $hasStdClass = false;
                 $hasTraversable = false;
                 $minimumTokenPhpVersion = self::MINIMUM_PHP_VERSION;
+                $numberOfDifferentTypes = [];
                 foreach ($types as $key => $type) {
                     if (1 !== Preg::match(self::CLASS_REGEX, $type, $matches)) {
                         continue;
                     }
                     if (isset($matches['array'])) {
                         $hasArray = true;
+                        $numberOfDifferentTypes['array'] = 1;
                         unset($types[$key]);
                     }
                     if ('iterable' === $type) {
                         $hasIterable = true;
+                        $numberOfDifferentTypes['iterable'] = 1;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70100;
                     }
                     if (stripos($type, 'Traversable')) {
                         $hasTraversable = true;
+                        $numberOfDifferentTypes['traversable'] = 1;
                         unset($types[$key]);
                     }
                     if ('null' === $type) {
                         $hasNull = true;
+                        $numberOfDifferentTypes['null'] = 1;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70100;
                     }
                     if ('void' === $type) {
                         $hasVoid = true;
+                        $numberOfDifferentTypes['void'] = 1;
                         unset($types[$key]);
                     }
                     if ('string' === $type) {
                         $hasString = true;
+                        $numberOfDifferentTypes['string'] = 1;
                         unset($types[$key]);
                     }
                     if ('int' === $type) {
                         $hasInt = true;
+                        $numberOfDifferentTypes['int'] = 1;
                         unset($types[$key]);
                     }
                     if ('float' === $type) {
                         $hasFloat = true;
+                        $numberOfDifferentTypes['float'] = 1;
                         unset($types[$key]);
                     }
                     if ('bool' === $type) {
                         $hasBool = true;
+                        $numberOfDifferentTypes['bool'] = 1;
                         unset($types[$key]);
                     }
                     if ('callable' === $type) {
                         $hasCallable = true;
+                        $numberOfDifferentTypes['callable'] = 1;
                         unset($types[$key]);
                     }
                     if ('array' === $type) {
                         $hasArray = true;
+                        $numberOfDifferentTypes['array'] = 1;
                         unset($types[$key]);
                     }
                     if ('object' === $type) {
                         $hasObject = true;
+                        $numberOfDifferentTypes['object'] = 1;
                         unset($types[$key]);
                         $minimumTokenPhpVersion = 70200;
                     }
                     if ('stdClass' === $type) {
                         $hasStdClass = true;
+                        $numberOfDifferentTypes['stdClass'] = 1;
                         unset($types[$key]);
                     }
                 }
@@ -260,6 +274,10 @@ function my_foo($bar)
 
                 if ((true === $hasMultipleTypes && false === $hasArray) &&
                     true === $hasMultipleTypes && !($hasIterable && $hasArray) && (false === $hasNull)) {
+                    continue;
+                }
+
+                if (2 < \count($numberOfDifferentTypes)) {
                     continue;
                 }
 

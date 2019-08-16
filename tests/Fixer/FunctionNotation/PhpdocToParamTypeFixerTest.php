@@ -331,6 +331,9 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param iterable|Foo[] $bar */ function my_foo(array $bar) {}',
                 '<?php /** @param iterable|Foo[] $bar */ function my_foo($bar) {}',
             ],
+            'union type scalars with null' => [
+                '<?php /** @param int|string|null $bar */ function my_foo($bar) {}',
+            ],
         ];
     }
 }
