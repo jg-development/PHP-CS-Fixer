@@ -366,7 +366,13 @@ function my_foo($bar)
         if ('&' === $possibleReferenceToken->getContent()) {
             $variableIndex = $variableIndex - 1;
         }
-        if (isset($paramVariable[1]) && ($paramVariable[1] === $variableToken || $paramVariable[1] === '&'.$variableToken)) {
+        $possibleVariadicToken = $tokens->offsetGet($variableIndex - 1);
+        if ('...' === $possibleReferenceToken->getContent()) {
+            $variableIndex = $variableIndex - 1;
+        }
+        if (isset($paramVariable[1]) && ($paramVariable[1] === $variableToken ||
+                $paramVariable[1] === '&'.$variableToken ||
+                $paramVariable[1] === '...'.$variableToken)) {
             return $variableIndex;
         }
 

@@ -357,6 +357,14 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
             'multiple non scalar type or array' => [
                 '<?php /** @param array|InputDefinition|Foo $bar */ function my_foo($bar) {}',
             ],
+            'variadic param type dot notation' => [
+                '<?php /** @param string ...$bar */ function my_foo(string ...$bar) {}',
+                '<?php /** @param string ...$bar */ function my_foo(...$bar) {}',
+            ],
+            'variadic param type array notation' => [
+                '<?php /** @param string[] $bar */ function my_foo(array ...$bar) {}',
+                '<?php /** @param string[] $bar */ function my_foo(...$bar) {}',
+            ],
         ];
     }
 }
