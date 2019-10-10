@@ -365,6 +365,16 @@ final class PhpdocToParamTypeFixerTest extends AbstractFixerTestCase
                 '<?php /** @param string[] $bar */ function my_foo(array ...$bar) {}',
                 '<?php /** @param string[] $bar */ function my_foo(...$bar) {}',
             ],
+            'do not fix null in param' => [
+                '<?php abstract class foo {
+                /**
+                * @param null   $bar
+                */
+                abstract public function getNumberFormatter($bar = null); }',
+            ],
+            'do not fix with commented function params' => [
+                '<?php /** @param bool $foo */ function bar(/* bool $foo = false */) { $foo = 0; }',
+            ],
         ];
     }
 }

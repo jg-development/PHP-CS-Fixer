@@ -264,6 +264,21 @@ function my_foo($bar)
 
                 $startIndex = $tokens->getNextTokenOfKind($index, ['(']) + 1;
                 $variableIndex = $this->findCorrectVariable($tokens, $startIndex - 1, $paramTypeAnnotation);
+
+                if (true === $hasNull && 1 === \count($numberOfDifferentTypes) && '' === $paramType && (
+                    false === $hasArray &&
+                        false === $hasIterable &&
+                        false === $hasString &&
+                        false === $hasInt &&
+                        false === $hasFloat &&
+                        false === $hasBool &&
+                        false === $hasCallable &&
+                        false === $hasObject &&
+                        false === $hasStdClass
+                    )) {
+                    continue;
+                }
+
                 if (null === $variableIndex) {
                     continue;
                 }
@@ -352,8 +367,12 @@ function my_foo($bar)
      */
     private function findCorrectVariable(Tokens $tokens, $index, $paramTypeAnnotation)
     {
+        $endIndex = $tokens->getNextTokenOfKind($index, [')']);
         $nextFunction = $tokens->getNextTokenOfKind($index, [[T_FUNCTION]]);
         $variableIndex = $tokens->getNextTokenOfKind($index, [[T_VARIABLE]]);
+        if ($variableIndex > $endIndex) {
+            return null;
+        }
         if (\is_int($nextFunction) && $variableIndex > $nextFunction) {
             return null;
         }
