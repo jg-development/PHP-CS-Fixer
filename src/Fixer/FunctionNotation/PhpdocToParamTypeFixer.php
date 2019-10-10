@@ -386,7 +386,7 @@ function my_foo($bar)
             $variableIndex = $variableIndex - 1;
         }
         $possibleVariadicToken = $tokens->offsetGet($variableIndex - 1);
-        if ('...' === $possibleReferenceToken->getContent()) {
+        if ('...' === $possibleVariadicToken->getContent()) {
             $variableIndex = $variableIndex - 1;
         }
         if (isset($paramVariable[1]) && ($paramVariable[1] === $variableToken ||
